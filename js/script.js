@@ -3,14 +3,22 @@ console.log('GhostNet Terminal inicializada.');
 
 // Simulación de base de datos clasificada (Arreglo de Objetos Literales)
 const AGENTES_SECRETOS = [
-{ codenom: 'PHANTOM', nombreReal: 'Elena Rostova',
-pais: 'Alemania', peligro: 85, activo: true },
-{ codenom: 'SPECTER', nombreReal: 'Marcus Vance',
-pais: 'Reino Unido', peligro: 40, activo: false },
-{ codenom: 'MIRAGE', nombreReal: 'Kaelen Voss',
-pais: 'Japón', peligro: 95, activo: true },
-{ codenom: 'RAVEN', nombreReal: 'Damian Cruz',
-pais: 'México', peligro: 60, activo: true }
+    {
+        codenom: 'PHANTOM', nombreReal: 'Elena Rostova',
+        pais: 'Alemania', peligro: 85, activo: true
+    },
+    {
+        codenom: 'SPECTER', nombreReal: 'Marcus Vance',
+        pais: 'Reino Unido', peligro: 40, activo: false
+    },
+    {
+        codenom: 'MIRAGE', nombreReal: 'Kaelen Voss',
+        pais: 'Japón', peligro: 95, activo: true
+    },
+    {
+        codenom: 'RAVEN', nombreReal: 'Damian Cruz',
+        pais: 'México', peligro: 60, activo: true
+    }
 ];
 
 
@@ -79,12 +87,12 @@ ${agente.peligro}%
 const contenedorTarjetas = document.getElementById('contenedor-tarjetas');
 // Función flecha que recibe una lista y una función callback que arma el diseño
 const renderizarAgentes = (lista, plantillaCallback) => {
-let acumuladorHTML = '';
-// Recorremos la lista acumulando el HTML generado por el callback
-for (let i = 0; i < lista.length; i = i + 1) {
-acumuladorHTML = acumuladorHTML + plantillaCallback(lista[i]);
-}
-contenedorTarjetas.innerHTML = acumuladorHTML;
+    let acumuladorHTML = '';
+    // Recorremos la lista acumulando el HTML generado por el callback
+    for (let i = 0; i < lista.length; i = i + 1) {
+        acumuladorHTML = acumuladorHTML + plantillaCallback(lista[i]);
+    }
+    contenedorTarjetas.innerHTML = acumuladorHTML;
 };
 
 // Render inicial con todos los agentes:
@@ -94,59 +102,56 @@ renderizarAgentes(AGENTES_SECRETOS, crearTarjetaAgente);
 
 // Recibe una lista y un CRITERIO (callback que responde true o false)
 const filtrarAgentes = (lista, criterioCallback) => {
-const resultado = [];
-for (let i = 0; i < lista.length; i = i + 1) {
-if (criterioCallback(lista[i])) {
-resultado.push(lista[i]);
-}
-}
-return resultado;
+    const resultado = [];
+    for (let i = 0; i < lista.length; i = i + 1) {
+        if (criterioCallback(lista[i])) {
+            resultado.push(lista[i]);
+        }
+    }
+    return resultado;
 };
 // Callback criterio con retorno implícito: ¿el agente está activo?
 const estaActivo = (agente) => agente.activo;
 }
 // Recibe una lista y un EXTRACTOR (callback que devuelve el número a promediar)
 const calcularPromedio = (lista, extractorCallback) => {
-if (lista.length === 0) {
-return 0;                       
-// evita dividir entre cero
-let suma = 0;
-for (let i = 0; i < lista.length; i = i + 1) {
-suma = suma + extractorCallback(lista[i]);
-}
-return Math.round(suma / lista.length);
-};
+    if (lista.length === 0) {
+        return 0;
+        // evita dividir entre cero
+        let suma = 0;
+        for (let i = 0; i < lista.length; i = i + 1) {
+            suma = suma + extractorCallback(lista[i]);
+        }
+        return Math.round(suma / lista.length);
+    };
 
 
 
-// filtrarAgentes(AGENTES_SECRETOS, estaActivo).length;       
-// calcularPromedio(AGENTES_SECRETOS, (a) => a.peligro); 
+    // filtrarAgentes(AGENTES_SECRETOS, estaActivo).length;       
+    // calcularPromedio(AGENTES_SECRETOS, (a) => a.peligro); 
 
 
-// Botón "Solo en Activo"
-document.getElementById('btn-activos').addEventListener('click', () => {
-const activos = filtrarAgentes(AGENTES_SECRETOS, estaActivo);
-renderizarAgentes(activos, crearTarjetaAgente);
-});
-// Botón "Todos los Agentes"
-document.getElementById('btn-todos').addEventListener('click', () => {
-renderizarAgentes(AGENTES_SECRETOS, crearTarjetaAgente);
-});
-// Botón "Calcular Riesgo Red"
-document.getElementById('btn-auditoria').addEventListener('click', () => {
-const promedio = calcularPromedio(
-AGENTES_SECRETOS,
-(agente) => agente.peligro
-);
-const alertaContenedor = document.getElementById('alerta-riesgo');
-alertaContenedor.innerHTML = /*html*/`
-<div class="alert alert-danger border-danger bg-danger
-bg-opacity-10 text-danger-emphasis mb-0" role="alert">
-⚠
- <strong>AUDITORÍA DE RED COMPLETADA:</strong>
-Amenaza promedio global estimada en <strong>${promedio}%</strong>.
-</div>
-`;
+    // Botón "Solo en Activo"
+    document.getElementById('btn-activos').addEventListener('click', () => {
+        const activos = filtrarAgentes(AGENTES_SECRETOS, estaActivo);
+        renderizarAgentes(activos, crearTarjetaAgente);
+    });
+    // Botón "Todos los Agentes"
+    document.getElementById('btn-todos').addEventListener('click', () => {
+        renderizarAgentes(AGENTES_SECRETOS, crearTarjetaAgente);
+    });
+    // Botón "Calcular Riesgo Red"
+   document.getElementById('btn-auditoria').addEventListener('click', () => {
+    const promedio = calcularPromedio(
+        AGENTES_SECRETOS,
+        (agente) => agente.danger // Asegúrate si es "danger" o "peligro" según tu objeto
+    );
+    const alertaContenedor = document.getElementById('alerta-riesgo');
+    alertaContenedor.innerHTML = /*html*/ `
+        <div class="alert alert-danger border-danger bg-danger bg-opacity-10 text-danger-emphasis mb-0" role="alert">
+            <strong>AUDITORÍA DE RED COMPLETADA:</strong> Amenaza promedio global estimada en <strong>${promedio}%</strong>
+        </div>
+    `;
 });
 
 
