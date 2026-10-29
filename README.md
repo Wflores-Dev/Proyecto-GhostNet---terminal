@@ -114,7 +114,7 @@ Proyecto desarrollado para el curso **Desarrollador Web Front-End 1**.
 
 </div>
 
-docs: agregar README del proyecto
+
 
 
 
